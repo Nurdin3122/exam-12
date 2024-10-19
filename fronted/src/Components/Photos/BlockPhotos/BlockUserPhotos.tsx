@@ -17,6 +17,7 @@ const BlockUserPhotos = () => {
     const displayNameUser = useAppSelector(displayNameUserState);
 
 
+
     useEffect(() => {
         dispatch(getOneUser(id)).unwrap();
         dispatch(getUserPhotos(id)).unwrap();
@@ -31,17 +32,21 @@ const BlockUserPhotos = () => {
                     photosLoading ? (
                         <Spinner/>
                     ) : (
-                        photos.map(photo => (
-                            <PhotoItem key={photo._id}
-                                       userId={photo.user._id}
-                                       name={photo.name}
-                                       image={photo.image}
-                                       userName={photo.user.name}
-                                       checkUserPhoto={user._id === id}
-                                       checkUsername={false}
-                                       id={photo._id}
-                            />
-                        ))
+                        photos && photos.length > 0 ? (
+                            photos.map(photo => (
+                                <PhotoItem key={photo._id}
+                                           userId={photo.user?._id}
+                                           name={photo.name}
+                                           image={photo.image}
+                                           userName={photo.user?.name}
+                                           checkUserPhoto={user?._id === id}
+                                           checkUsername={false}
+                                           id={photo._id}
+                                />
+                            ))
+                        ) : (
+                            <p>Нет фотографий для отображения.</p>
+                        )
                     )
                 }
             </div>
