@@ -13,3 +13,16 @@ export interface UserMutation {
     displayName:string;
     image: string | null;
 }
+
+
+export interface Photo {
+    _id:string;
+    name:string;
+    image:string | null;
+    user:string;
+}
+
+export interface PhotoMutation {
+    name:string;
+    image:string | null;
+}

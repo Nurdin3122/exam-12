@@ -44,6 +44,11 @@ const HeaderForLogin = () => {
                                             Logout
                                         </button>
                                     </li>
+                                    <li>
+                                        <Link to="/create-photo" type="button" className="btn btn-close-white">
+                                            Add photo
+                                        </Link>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
