@@ -4,8 +4,11 @@ import {Error} from "mongoose";
 import User from "../models/Users";
 import {imagesUpload} from "../multer";
 import bcrypt from "bcrypt";
+import config from "../config";
+import {OAuth2Client} from "google-auth-library";
 
 const usersRouter = express.Router();
+const googleClientId = new OAuth2Client(config.google.clientId);
 
 usersRouter.post('/', imagesUpload.single('image'), async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -52,6 +55,48 @@ usersRouter.post('/sessions', async (req: Request, res: Response, next: NextFunc
         }
     }
 });
+
+usersRouter.post("/google",async (req: Request, res: Response, next: NextFunction):Promise<void> => {
+    try {
+        const ticket = await googleClientId.verifyIdToken({
+            idToken: req.body.credential,
+            audience:config.google.clientId,
+        });
+
+        const payload = ticket.getPayload();
+        if(!payload) {
+             res.status(400).send({error:"Google Login Error"});
+            return
+        }
+
+        const email = payload.email;
+        const id = payload.sub;
+        const displayName = payload.name;
+
+        if(!email) {
+             res.status(400).send({error:"No email"})
+            return
+        }
+
+        let user = await User.findOne({email:email}).exec();
+        if(!user) {
+            const newPassword = crypto.randomUUID();
+            user = new User({
+                email:email,
+                password:newPassword,
+                googleId:id,
+                token:randomUUID(),
+                displayName:displayName,
+            });
+        }
+        await user.save();
+         res.send(user)
+
+    } catch (error) {
+        return next(error)
+    }
+});
+
 
 usersRouter.delete('/sessions', async (req:Request, res:Response, next:NextFunction):Promise<void> => {
     try {

@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import {useAppDispatch} from "../../app/hooks.ts";
 import {useNavigate} from "react-router-dom";
-import {saveUser} from "./UserThunks.tsx";
+import {googleLogin, saveUser} from "./UserThunks.tsx";
+import {CredentialResponse, GoogleLogin} from "@react-oauth/google";
 
 const LoginUser = () => {
     const [newSaveUser, setNewSaveUser] = useState({
@@ -26,12 +27,23 @@ const LoginUser = () => {
         } catch(error) {
             console.log(error);
         }
-    }
+    };
+
+    const googleLoginHandler = async (credentialResponse:CredentialResponse) => {
+        if(credentialResponse.credential) {
+            await dispatch(googleLogin(credentialResponse.credential));
+            navigate("/");
+        }
+    };
+
 
     return (
         <>
             <h5 className="mt-5 text-center">Login into an account</h5>
+
+
             <div className="d-flex justify-content-center ">
+
 
                 <form onSubmit={onSend}>
                     <div className="form-group">
@@ -63,6 +75,10 @@ const LoginUser = () => {
                     </div>
 
                 </form>
+            </div>
+
+            <div className="d-flex justify-content-center mt-5">
+                <GoogleLogin onSuccess={googleLoginHandler}/>
             </div>
         </>
     );

@@ -36,6 +36,9 @@ const UserSchema = new Schema<UserFields,UserModel, UserMethods>({
     image: {
         type: String,
     },
+    googleID: {
+        type:String,
+    },
 
 });
 

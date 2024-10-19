@@ -29,6 +29,20 @@ export const saveUser = createAsyncThunk<User, UserMutation>(
     }
 );
 
+export const googleLogin = createAsyncThunk<User,string>(
+    'users/googleLogin',
+    async (credential) => {
+        try {
+            const {data:user} = await axiosApi.post<User>("/users/google",{credential});
+            return user
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+);
+
+
 
 export const logout = createAsyncThunk<void,void>(
     'users/logout',

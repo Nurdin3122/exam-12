@@ -27,7 +27,11 @@ const config = {
     rootPath,
     publicPath: path.join(rootPath, 'public'),
     corsOption,
-    db: 'mongodb://localhost/exam-12-app'
+    db: 'mongodb://localhost/exam-12-app',
+    google: {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }
 };
 
 

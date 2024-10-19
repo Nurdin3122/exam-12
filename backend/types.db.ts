@@ -5,4 +5,5 @@ export interface UserFields {
     role: string;
     displayName:string;
     image: string | null;
+    googleID?: string;
 }
