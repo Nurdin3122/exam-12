@@ -57,6 +57,19 @@ photosRouter.post('/' ,auth,imagesUpload.single('image'),async (req:RequestWithU
     }
 });
 
+photosRouter.delete('/:id',auth,async (req:RequestWithUser,res:Response,next:NextFunction):Promise<void> => {
+    try {
+        const id = req.params.id;
+        await Photo.deleteOne({ _id: id });
+        res.status(200).send({ message: 'Photo deleted successfully' });
+        return;
+
+    } catch (error){
+        return next(error);
+    }
+
+});
+
 
 
 

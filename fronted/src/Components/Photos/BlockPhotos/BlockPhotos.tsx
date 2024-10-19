@@ -24,11 +24,12 @@ const BlockPhotos = () => {
                     ) : (
                         photos.map(photo => (
                            <PhotoItem key={photo._id}
+                                      id={photo._id}
                                       userId={photo.user._id._id}
                                       userName={photo.user.name}
                                       name={photo.name}
                                       image={photo.image}
-                                      checkUserPhoto={false}
+                                      checkUsername={true}
                            />
                         ))
                     )

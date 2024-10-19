@@ -40,14 +40,19 @@ const HeaderForLogin = () => {
                                 </p>
                                 <ul className="dropdown-menu text-center">
                                     <li>
-                                        <button type="button" className="btn btn-close-white" onClick={handleLogout}>
-                                            Logout
-                                        </button>
-                                    </li>
-                                    <li>
                                         <Link to="/create-photo" type="button" className="btn btn-close-white">
                                             Add photo
                                         </Link>
+                                    </li>
+                                    <li>
+                                        <Link to={`/block-user-photos/${user._id}`} type="button" className="btn btn-close-white">
+                                            My gallery
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <button type="button" className="btn btn-close-white" onClick={handleLogout}>
+                                            Logout
+                                        </button>
                                     </li>
                                 </ul>
                             </li>

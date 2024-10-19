@@ -5,12 +5,14 @@ import {getUserPhotos} from "../PhotosThunks.ts";
 import {loadingPhotosState, photosState} from "../PhotosSlice.ts";
 import Spinner from "../../Mini-Components/Spinner/Spinner.tsx";
 import PhotoItem from "./PhotoItem.tsx";
+import {userState} from "../../User/SliceUser.tsx";
 
 const BlockUserPhotos = () => {
     const {id} = useParams();
     const dispatch = useAppDispatch();
     const photos = useAppSelector(photosState);
     const photosLoading = useAppSelector(loadingPhotosState);
+    const user = useAppSelector(userState)
 
 
     useEffect(() => {
@@ -32,7 +34,9 @@ const BlockUserPhotos = () => {
                                        name={photo.name}
                                        image={photo.image}
                                        userName={photo.user.name}
-                                       checkUserPhoto={true}
+                                       checkUserPhoto={user._id === id}
+                                       checkUsername={false}
+                                       id={photo._id}
                             />
                         ))
                     )
