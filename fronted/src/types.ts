@@ -29,3 +29,7 @@ export interface PhotoMutation {
     name:string;
     image:string | null;
 }
+
+export interface displayNameUser {
+    displayName:string
+}

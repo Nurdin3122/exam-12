@@ -1,19 +1,21 @@
 
 import {RootState} from "../../app/store";
 import {createSlice} from "@reduxjs/toolkit";
-import {User} from "../../types.ts";
-import {googleLogin, saveUser} from "./UserThunks.tsx";
+import {displayNameUser, User} from "../../types.ts";
+import {getOneUser, googleLogin, saveUser} from "./UserThunks.tsx";
 import {createUser} from "./UserThunks.tsx";
 
 export interface userState {
-    user:User | null
+    user:User | null;
+    displayNameUser:displayNameUser | null;
     loading:boolean;
-    registerError:boolean
+    registerError:boolean;
 }
 
 
 export const initialState:userState = {
     user:null,
+    displayNameUser:null,
     loading:false,
     registerError:false,
 }
@@ -58,7 +60,7 @@ export const UserSlice = createSlice<userState>({
 
         builder.addCase(googleLogin.pending,(state) => {
             state.loading = true;
-            state.error = false;
+            state.registerError = false;
         });
         builder.addCase(googleLogin.fulfilled,(state,{payload: user}) => {
             state.loading = false;
@@ -66,8 +68,25 @@ export const UserSlice = createSlice<userState>({
         });
         builder.addCase(googleLogin.rejected,(state) => {
             state.loading = false;
-            state.error = true;
+            state.registerError = true;
         });
+
+
+        builder.addCase(getOneUser.pending,(state) => {
+            state.loading = true;
+            state.registerError = false;
+        });
+        builder.addCase(getOneUser.fulfilled,(state,{payload:name}) => {
+            state.loading = false;
+            state.displayNameUser = name;
+        });
+        builder.addCase(getOneUser.rejected,(state) => {
+            state.loading = false;
+            state.registerError = true;
+        });
+
+
+
 
     }
 });
@@ -75,3 +94,4 @@ export const UserSlice = createSlice<userState>({
 export const {unsetUser} = UserSlice.actions;
 export const UserReducer = UserSlice.reducer;
 export const userState = (state: RootState) => state.user.user;
+export const displayNameUserState = (state: RootState) => state.user.displayNameUser;

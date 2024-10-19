@@ -1,7 +1,17 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {User, UserMutation} from "../../Types";
+import {displayNameUser, User, UserMutation} from "../../Types";
 import axiosApi from "../../AxiosApi/axiosApi";
 import {unsetUser} from "./SliceUser.tsx";
+
+
+
+export const getOneUser = createAsyncThunk<displayNameUser,string>(
+    'user/getOneUser',
+    async (id:string) => {
+        const response = await axiosApi.get<displayNameUser | null>(`/users/${id}`);
+        return response.data
+    }
+);
 
 export const createUser = createAsyncThunk<User, UserMutation>(
     'user/createUser',

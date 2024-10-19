@@ -5,24 +5,27 @@ import {getUserPhotos} from "../PhotosThunks.ts";
 import {loadingPhotosState, photosState} from "../PhotosSlice.ts";
 import Spinner from "../../Mini-Components/Spinner/Spinner.tsx";
 import PhotoItem from "./PhotoItem.tsx";
-import {userState} from "../../User/SliceUser.tsx";
+import {displayNameUserState, userState} from "../../User/SliceUser.tsx";
+import {getOneUser} from "../../User/UserThunks.tsx";
 
 const BlockUserPhotos = () => {
     const {id} = useParams();
     const dispatch = useAppDispatch();
     const photos = useAppSelector(photosState);
     const photosLoading = useAppSelector(loadingPhotosState);
-    const user = useAppSelector(userState)
+    const user = useAppSelector(userState);
+    const displayNameUser = useAppSelector(displayNameUserState);
 
 
     useEffect(() => {
+        dispatch(getOneUser(id)).unwrap();
         dispatch(getUserPhotos(id)).unwrap();
     }, [id]);
 
 
     return (
         <div className="container-fluid ">
-            <h4 className="text-center">Username</h4>
+            <h4 className="text-center">{displayNameUser}</h4>
             <div className=" d-flex justify-content-center flex-wrap mt-4">
                 {
                     photosLoading ? (

@@ -10,6 +10,23 @@ import {OAuth2Client} from "google-auth-library";
 const usersRouter = express.Router();
 const googleClientId = new OAuth2Client(config.google.clientId);
 
+
+usersRouter.get('/:id',async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const user = await User.findById(id);
+        if(!user) {
+             res.status(404).send({ error: 'user not found' });
+            return
+        }
+         res.status(201).send(user.displayName);
+
+    } catch (error) {
+        return next(error);
+    }
+
+});
+
 usersRouter.post('/', imagesUpload.single('image'), async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const user = new User({
