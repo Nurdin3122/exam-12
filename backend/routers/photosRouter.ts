@@ -2,12 +2,26 @@ import express, { Request, Response, NextFunction } from "express";
 import Photo from "../models/Photos";
 import auth, {RequestWithUser} from "../middleware/auth";
 import {imagesUpload} from "../multer";
+import User from "../models/Users";
 
 const photosRouter = express.Router();
 
 photosRouter.get('/',async (req:Request,res:Response,next:NextFunction):Promise<void> => {
     try {
-        const photos = await Photo.find();
+        const { user } = req.query;
+        const query: Record<string, any> = {};
+
+        if(user) {
+            const trueUser= await User.findById(user);
+            if(!trueUser) {
+                 res.status(400).send("there is not such id artist");
+                return
+            }
+            query['user._id'] = user;
+        }
+
+        const photos = await Photo.find(query).populate({path: 'user._id', select: '_id name'});
+
         if(!photos) {
             res.status(404).send({ error: 'photos not found' });
             return

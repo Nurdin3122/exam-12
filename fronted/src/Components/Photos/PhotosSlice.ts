@@ -1,8 +1,7 @@
 import {Photo} from "../../types.ts";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
-import {createPhoto, getAllPhotos} from "./PhotosThunks.ts";
-import {s} from "vite/dist/node/types.d-aGj9QkWt";
+import {createPhoto, getAllPhotos, getUserPhotos} from "./PhotosThunks.ts";
 
 export interface photoState {
     photos:Photo[];
@@ -33,6 +32,7 @@ export const PhotoSlice = createSlice<photoState>({
             state.errorPhotos = true;
         });
 
+
         builder.addCase(getAllPhotos.pending,(state) => {
             state.loadingPhotos = true;
             state.errorPhotos = false;
@@ -42,6 +42,19 @@ export const PhotoSlice = createSlice<photoState>({
             state.photos = photos
         });
         builder.addCase(getAllPhotos.rejected,(state) => {
+            state.loadingPhotos = false;
+            state.errorPhotos = true;
+        });
+
+        builder.addCase(getUserPhotos.pending,(state) => {
+            state.loadingPhotos = true;
+            state.errorPhotos = false;
+        });
+        builder.addCase(getUserPhotos.fulfilled,(state,{payload:photos}) => {
+            state.loadingPhotos = false;
+            state.photos = photos
+        });
+        builder.addCase(getUserPhotos.rejected,(state) => {
             state.loadingPhotos = false;
             state.errorPhotos = true;
         });

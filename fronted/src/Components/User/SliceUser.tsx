@@ -2,7 +2,7 @@
 import {RootState} from "../../app/store";
 import {createSlice} from "@reduxjs/toolkit";
 import {User} from "../../types.ts";
-import {getOneUser, googleLogin, saveUser} from "./UserThunks.tsx";
+import {googleLogin, saveUser} from "./UserThunks.tsx";
 import {createUser} from "./UserThunks.tsx";
 
 export interface userState {

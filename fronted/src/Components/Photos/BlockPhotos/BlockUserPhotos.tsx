@@ -1,35 +1,39 @@
 import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
+import {useParams} from "react-router-dom";
+import {getUserPhotos} from "../PhotosThunks.ts";
 import {loadingPhotosState, photosState} from "../PhotosSlice.ts";
 import Spinner from "../../Mini-Components/Spinner/Spinner.tsx";
-import {getAllPhotos} from "../PhotosThunks.ts";
 import PhotoItem from "./PhotoItem.tsx";
 
-const BlockPhotos = () => {
+const BlockUserPhotos = () => {
+    const {id} = useParams();
     const dispatch = useAppDispatch();
     const photos = useAppSelector(photosState);
     const photosLoading = useAppSelector(loadingPhotosState);
 
+
     useEffect(() => {
-        dispatch(getAllPhotos()).unwrap();
-    }, [dispatch]);
+        dispatch(getUserPhotos(id)).unwrap();
+    }, [id]);
+
 
     return (
         <div className="container-fluid ">
-            <h4 className="text-center">Photos</h4>
+            <h4 className="text-center">Username</h4>
             <div className=" d-flex justify-content-center flex-wrap mt-4">
                 {
                     photosLoading ? (
                         <Spinner/>
                     ) : (
                         photos.map(photo => (
-                           <PhotoItem key={photo._id}
-                                      userId={photo.user._id._id}
-                                      userName={photo.user.name}
-                                      name={photo.name}
-                                      image={photo.image}
-                                      checkUserPhoto={false}
-                           />
+                            <PhotoItem key={photo._id}
+                                       userId={photo.user._id}
+                                       name={photo.name}
+                                       image={photo.image}
+                                       userName={photo.user.name}
+                                       checkUserPhoto={true}
+                            />
                         ))
                     )
                 }
@@ -39,4 +43,4 @@ const BlockPhotos = () => {
     );
 };
 
-export default BlockPhotos;
+export default BlockUserPhotos;
