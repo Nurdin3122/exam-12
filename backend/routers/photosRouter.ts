@@ -3,6 +3,7 @@ import Photo from "../models/Photos";
 import auth, {RequestWithUser} from "../middleware/auth";
 import {imagesUpload} from "../multer";
 import User from "../models/Users";
+import permit from "../middleware/permit";
 
 const photosRouter = express.Router();
 
@@ -58,6 +59,19 @@ photosRouter.post('/' ,auth,imagesUpload.single('image'),async (req:RequestWithU
 });
 
 photosRouter.delete('/:id',auth,async (req:RequestWithUser,res:Response,next:NextFunction):Promise<void> => {
+    try {
+        const id = req.params.id;
+        await Photo.deleteOne({ _id: id });
+        res.status(200).send({ message: 'Photo deleted successfully' });
+        return;
+
+    } catch (error){
+        return next(error);
+    }
+
+});
+
+photosRouter.delete('/admin-delete/:id',auth,permit("admin"),async (req:RequestWithUser,res:Response,next:NextFunction):Promise<void> => {
     try {
         const id = req.params.id;
         await Photo.deleteOne({ _id: id });

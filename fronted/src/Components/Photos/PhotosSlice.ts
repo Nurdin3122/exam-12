@@ -1,7 +1,7 @@
 import {Photo} from "../../types.ts";
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
-import {createPhoto, deletePhoto, getAllPhotos, getUserPhotos} from "./PhotosThunks.ts";
+import {createPhoto, deletePhoto, deletePhotoLikeAdmin, getAllPhotos, getUserPhotos} from "./PhotosThunks.ts";
 
 export interface photoState {
     photos:Photo[];
@@ -74,9 +74,21 @@ export const PhotoSlice = createSlice<photoState>({
             state.errorPhotos = true;
         });
 
+
+        builder.addCase(deletePhotoLikeAdmin.pending,(state) => {
+            state.loadingDeletePhoto = true;
+            state.errorPhotos = false;
+        });
+        builder.addCase(deletePhotoLikeAdmin.fulfilled,(state) => {
+            state.loadingDeletePhoto = false;
+        });
+        builder.addCase(deletePhotoLikeAdmin.rejected,(state) => {
+            state.loadingDeletePhoto = false;
+            state.errorPhotos = true;
+        });
+
     }
 });
-
 export const PhotoReducer = PhotoSlice.reducer;
 
 export const photosState = (state: RootState) => state.photo.photos;

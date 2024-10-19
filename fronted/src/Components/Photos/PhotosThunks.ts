@@ -60,4 +60,20 @@ export const deletePhoto = createAsyncThunk(
         })
         return response.data
     }
-)
+);
+
+export const deletePhotoLikeAdmin = createAsyncThunk(
+    "photo/deletePhotoLikeAdmin",
+    async (id:string) => {
+        const user = localStorage.getItem('persist:exam-12-app:user');
+        const UserJsonParse = JSON.parse(user);
+        const token = JSON.parse(UserJsonParse.user);
+
+        const response = await axiosApi.delete(`/photos/admin-delete/${id}`,{
+            headers: {
+                Authorization: `Bearer ${token.token}`
+            }
+        })
+        return response.data
+    }
+);

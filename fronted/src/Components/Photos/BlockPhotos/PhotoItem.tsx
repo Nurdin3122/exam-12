@@ -5,8 +5,9 @@ import {apiURL} from "../../../AxiosApi/baseUrl.ts";
 import {Modal, Spinner} from "react-bootstrap";
 import "./PhotoItem.css"
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
-import {deletePhoto, getAllPhotos} from "../PhotosThunks.ts";
+import {deletePhoto, deletePhotoLikeAdmin, getAllPhotos} from "../PhotosThunks.ts";
 import {loadingDeletePhotoState} from "../PhotosSlice.ts";
+import {userState} from "../../User/SliceUser.tsx";
 
 export interface Props {
     id:string
@@ -22,7 +23,8 @@ const PhotoItem:React.FC<Props> = ({name,userName,image,userId,checkUserPhoto,id
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [showModal, setShowModal] = useState(false);
-    const loadingDeletePhoto = useAppSelector(loadingDeletePhotoState)
+    const loadingDeletePhoto = useAppSelector(loadingDeletePhotoState);
+    const user = useAppSelector(userState);
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
@@ -37,13 +39,29 @@ const PhotoItem:React.FC<Props> = ({name,userName,image,userId,checkUserPhoto,id
 
     const onDelete = async (id:string) => {
         await dispatch(deletePhoto(id));
-        await dispatch(getAllPhotos);
-        navigate('/')
+        await dispatch(getAllPhotos());
+        navigate('/');
     };
+
+    const onDeleteForAdmin = async (id:string) => {
+        await dispatch(deletePhotoLikeAdmin(id));
+        await dispatch(getAllPhotos());
+        navigate('/');
+    }
     return (
         <>
             <div className="card me-3 ms-3 mt-3 border block-photo-image"
                  style={{width: "250px", height: "auto", borderRadius: "10px",}}>
+
+                { loadingDeletePhoto ? (
+                    <Spinner/>
+                ) : (
+                     user && user.role === 'admin' && (
+                        <div className="text-end pe-3 pt-3">
+                            <button className="btn btn-close" onClick={() => onDeleteForAdmin(id)}></button>
+                        </div>
+                    )
+                )}
 
                 <img src={`${cardImage}`} alt={`${name}`} style={{
                     height: "250px",
@@ -56,7 +74,6 @@ const PhotoItem:React.FC<Props> = ({name,userName,image,userId,checkUserPhoto,id
 
                 <div className="card-body text-center">
                     {checkUsername ? (
-
                                 <div>
                                     <h6>{name}</h6>
                                     {
@@ -82,11 +99,8 @@ const PhotoItem:React.FC<Props> = ({name,userName,image,userId,checkUserPhoto,id
                             <h6> {name}</h6>
                             )
                         )}
-
-
                 </div>
             </div>
-
 
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
