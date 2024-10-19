@@ -3,6 +3,7 @@ import express from 'express';
 import  mongoose from "mongoose";
 import config from "./config";
 import path from "path";
+import usersRouter from "./routers/usersRouter";
 
 
 const app = express();
