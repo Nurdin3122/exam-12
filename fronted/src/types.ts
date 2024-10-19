@@ -19,7 +19,10 @@ export interface Photo {
     _id:string;
     name:string;
     image:string | null;
-    user:string;
+    user: {
+        _id: string;
+        name: string;
+    };
 }
 
 export interface PhotoMutation {

@@ -1,9 +1,10 @@
 import React from 'react';
+import BlockPhotos from "../../Components/Photos/BlockPhotos/BlockPhotos.tsx";
 
 const Body = () => {
     return (
         <div>
-            helo
+            <BlockPhotos/>
         </div>
     );
 };

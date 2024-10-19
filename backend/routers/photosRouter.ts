@@ -28,7 +28,10 @@ photosRouter.post('/' ,auth,imagesUpload.single('image'),async (req:RequestWithU
         }
 
         const photo = new Photo({
-            user:user._id,
+            user: {
+                _id: user._id,
+                name: user.displayName,
+            },
             name:req.body.name,
             image:req.file ? req.file.filename : null,
         })

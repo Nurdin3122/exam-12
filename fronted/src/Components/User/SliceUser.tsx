@@ -2,7 +2,7 @@
 import {RootState} from "../../app/store";
 import {createSlice} from "@reduxjs/toolkit";
 import {User} from "../../types.ts";
-import {googleLogin, saveUser} from "./UserThunks.tsx";
+import {getOneUser, googleLogin, saveUser} from "./UserThunks.tsx";
 import {createUser} from "./UserThunks.tsx";
 
 export interface userState {
@@ -27,6 +27,7 @@ export const UserSlice = createSlice<userState>({
         }
     },
     extraReducers:(builder) => {
+
         builder.addCase(createUser.pending,(state) => {
             state.loading = true;
             state.registerError = false;

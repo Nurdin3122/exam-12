@@ -1,6 +1,16 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {PhotoMutation} from "../../types.ts";
+import {Photo, PhotoMutation} from "../../types.ts";
 import axiosApi from "../../AxiosApi/axiosApi.ts";
+
+
+
+export const getAllPhotos = createAsyncThunk<Photo[]>(
+    "photo/getAllPhotos",
+    async () => {
+        const response = await axiosApi.get<Photo[] | null>('/photos');
+        return response.data;
+    }
+)
 
 export const createPhoto = createAsyncThunk<void,PhotoMutation>(
     'photo/createPhoto',
@@ -19,7 +29,7 @@ export const createPhoto = createAsyncThunk<void,PhotoMutation>(
             }
         });
 
-        const response = await axiosApi.post('/photos',formData,{
+        const response = await axiosApi.post<Photo | null>('/photos',formData,{
             headers: {
                 Authorization: `Bearer ${token.token}`
             }
