@@ -21,6 +21,7 @@ const LoginUser = () => {
 
     const onSend = async (e: React.FormEvent) => {
         e.preventDefault();
+
         try {
             await dispatch(saveUser(newSaveUser))
             navigate('/');
@@ -36,15 +37,10 @@ const LoginUser = () => {
         }
     };
 
-
     return (
         <>
             <h5 className="mt-5 text-center">Login into an account</h5>
-
-
             <div className="d-flex justify-content-center ">
-
-
                 <form onSubmit={onSend}>
                     <div className="form-group">
                         <label htmlFor="email">Email:</label>
@@ -73,7 +69,6 @@ const LoginUser = () => {
                     <div className="d-flex justify-content-center">
                         <button type="submit" className="btn btn-danger">Create</button>
                     </div>
-
                 </form>
             </div>
 

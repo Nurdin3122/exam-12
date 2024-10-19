@@ -27,7 +27,7 @@ const CreateUser = () => {
     const onSend = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await dispatch(createUser(newUser));
+            await dispatch(createUser(newUser)).unwrap();
             navigate('/');
         } catch(error) {
             console.log(error);
@@ -35,10 +35,16 @@ const CreateUser = () => {
     };
 
     const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, files} = e.target;
-        if (files) {
+        const { name, files } = e.target;
+        if (files && files.length > 0) {
             setNewUser(prevState => ({
-                ...prevState, [name]: files[0]
+                ...prevState,
+                [name]: files[0]
+            }));
+        } else {
+            setNewUser(prevState => ({
+                ...prevState,
+                [name]: null
             }));
         }
     };

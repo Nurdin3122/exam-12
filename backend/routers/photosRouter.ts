@@ -42,6 +42,11 @@ photosRouter.post('/' ,auth,imagesUpload.single('image'),async (req:RequestWithU
             return
         }
 
+        if (!req.body.name || !req.file) {
+             res.status(401).send({ error: 'Both name and image are required' });
+            return
+        }
+
         const photo = new Photo({
             user: {
                 _id: user._id,

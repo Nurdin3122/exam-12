@@ -17,10 +17,16 @@ const CreatePhotos = () => {
 
 
     const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, files} = e.target;
-        if (files) {
+        const { name, files } = e.target;
+        if (files && files.length > 0) {
             setNewPhoto(prevState => ({
-                ...prevState, [name]: files[0]
+                ...prevState,
+                [name]: files[0]
+            }));
+        } else {
+            setNewPhoto(prevState => ({
+                ...prevState,
+                [name]: null
             }));
         }
     };
@@ -34,8 +40,14 @@ const CreatePhotos = () => {
 
     const onSend = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!newPhoto.name || !newPhoto.image) {
+            alert('Both name and image are required');
+            return;
+        }
+
         try {
-            await dispatch(createPhoto(newPhoto));
+            await dispatch(createPhoto(newPhoto)).unwrap();
             navigate('/');
         } catch(error) {
             console.log(error);

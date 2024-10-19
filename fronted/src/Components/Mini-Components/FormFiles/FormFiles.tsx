@@ -46,7 +46,6 @@ const FormFiles: React.FC<Props> = ({onChange, name}) => {
                 ref={inputRef}
                 onChange={onFileChange}
                 style={{ display: 'none' }}
-                required
             />
         </div>
     );
